@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mapa de Antigüedad de Instalaciones Eléctricas – Gijón</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Archivo CSS externo -->
+  <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Mapa de Antigüedad de Instalaciones Eléctricas – Gijón</h1>
+        <p class="lead">Visualiza un mapa de calor con las zonas donde las instalaciones eléctricas son más antiguas.</p>
+      </div>
+      <nav>
+        <a class="small" href="#contacto">Contacto</a> •
+        <a class="small" href="#charlas">Charlas</a>
+      </nav>
+    </header>
+
+    <main class="layout">
+      <section class="card">
+        <div id="map"></div>
+        <div class="legend" id="legend">
+          <div class="row"><div class="swatch" style="background:#fff0f0"></div> <small>Baja antigüedad</small></div>
+          <div class="row"><div class="swatch" style="background:#ff9999"></div> <small>Media antigüedad</small></div>
+          <div class="row"><div class="swatch" style="background:#c40000"></div> <small>Alta antigüedad</small></div>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <div class="card section" id="contacto">
+          <h3>Contacto</h3>
+          <form id="contactForm">
+            <label>Nombre</label>
+            <input type="text" required />
+
+            <label>Email</label>
+            <input type="email" required />
+
+            <label>Mensaje</label>
+            <textarea rows="4" required></textarea>
+
+            <button type="submit">Enviar</button>
+          </form>
+        </div>
+
+        <div class="card section" id="charlas">
+          <h3>Organizar charlas</h3>
+          <form id="talkForm">
+            <label>Título</label>
+            <input type="text" required />
+
+            <label>Fecha</label>
+            <input type="date" />
+
+            <button type="submit">Proponer charla</button>
+          </form>
+
+          <h4>Próximas charlas</h4>
+          <ul class="talks-list" id="talkList">
+            <li><strong>Renovación segura</strong><br><small>15/01/2026</small></li>
+          </ul>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      © <span id="year"></span> Gijón
+    </footer>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  
+    // Inicializar mapa
+    const map = L.map("map").setView([43.5322, -5.6611], 13);
+  
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: "© OpenStreetMap"
+    }).addTo(map);
+  
+    // --- GeoJSON de ejemplo (barrios de Gijón) ---
+    const barriosGeoJSON = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": { "name": "Cimavilla", "age": 0.95 },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [[
+            [-5.665458670835704,43.54845768464952], [-5.666243309789337, 43.548008356070426],[-5.6638923973738144, 43.545212000602675], [-5.662303630961787, 43.54556274155121], [-5.660519519676853, 43.546129844056594], [-5.660442465001864, 43.547354920117016], [-5.661953921433025, 43.54720025946639], [-5.663477232422878, 43.54740647357207]
+            ]]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": { "name": "El Coto", "age": 0.85 },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [[
+          ]]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": { "name": "La Calzada", "age": 0.75 },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [[
+            ]]
+          }
+        }
+      ]
+    };
+  
+    // Función para asignar color según antigüedad
+    function styleByAge(feature) {
+      const age = feature.properties.age || 0;
+      let fillColor;
+      if(age > 0.9) fillColor = '#c40000';      // muy antiguo
+      else if(age > 0.6) fillColor = '#ff6600'; // intermedio
+      else fillColor = '#ffcc00';               // reciente
+      return { color: '#900', weight: 1, fillColor: fillColor, fillOpacity: 0.7 };
+    }
+  
+    // Añadir GeoJSON al mapa
+    const barriosLayer = L.geoJSON(barriosGeoJSON, {
+      style: styleByAge,
+      onEachFeature: function(feature, layer){
+        layer.bindPopup(`<strong>${feature.properties.name}</strong><br>Antigüedad estimada: ${(feature.properties.age*100).toFixed(0)}%`);
+      }
+    }).addTo(map);
+  
+    // Ajustar vista al límite de los barrios
+    map.fitBounds(barriosLayer.getBounds().pad(0.2));
+  </script>
+</body>
+</html>
