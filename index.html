@@ -16,7 +16,10 @@
     <header>
       <div>
         <h1>Mapa de Antigüedad de Instalaciones Eléctricas – Gijón</h1>
-        <p class="lead">Visualiza un mapa de calor con las zonas donde las instalaciones eléctricas son más antiguas.</p>
+        <p class="lead">En el mapa se muestran las zonas marcadas en rojo donde las instalaciones eléctricas presentan mayor antigüedad.
+          Si tu vivienda se encuentra dentro de una de estas áreas, te recomendamos ponerte en contacto con nosotros a través del formulario que encontrarás más abajo para evaluar tu situación cuanto antes.
+          
+          Si no resides en una zona marcada pero aun así deseas contactar con nosotros, también puedes rellenar el formulario; en ese caso, por favor indícalo y especifica que no se trata de una solicitud urgente.</p>
       </div>
       <nav>
         <a class="small" href="#contacto">Contacto</a> •
@@ -107,19 +110,21 @@
         },
         {
           "type": "Feature",
-          "properties": { "name": "El Coto", "age": 0.85 },
+          "properties": { "name": "La Calzada", "age": 0.67 },
           "geometry": {
             "type": "Polygon",
             "coordinates": [[
+            [-5.701084704161843, 43.54165372227905], [-5.699904199505227, 43.535448616542624], [-5.693804206666783, 43.5356326483473], [-5.693887640628901, 43.537193716022244], [-5.692814417666, 43.53722992797583], [-5.692806951326617, 43.537608804909695], [-5.691455545294332, 43.537792830002445], [-5.693090671920032, 43.53965469932183], [-5.69518314335869, 43.54218001235188], [-5.695474330281627, 43.54197435217918], [-5.6974200090032525, 43.54319099355766], [-5.6981334292452175, 43.54261700769081], [-5.69954906413588, 43.54203760122712]
           ]]
           }
         },
         {
           "type": "Feature",
-          "properties": { "name": "La Calzada", "age": 0.75 },
+          "properties": { "name": "Viesques", "age": 0.43 },
           "geometry": {
             "type": "Polygon",
             "coordinates": [[
+            [-5.643135240295749, 43.52763387730897], [-5.641911822003323, 43.52501197883379], [-5.639778439269236, 43.524659003053074], [-5.6397641212785175, 43.522727981332594], [ -5.649181281055206, 43.521041888997104], [-5.653833668588788, 43.51972660474914], [-5.657341579744269, 43.52039108229266], [-5.655115757167522, 43.527739891360085], [-5.652403490151528, 43.52776058170943], [-5.6508355811773185, 43.52858181125288], [-5.650785641611918, 43.52922320192786], [-5.649851058230638, 43.5298645857724], [-5.648812316828696, 43.530285335334554], [-5.64715004260691, 43.529302573822406], [-5.644046655099004, 43.529002569753345]
             ]]
           }
         }
@@ -131,8 +136,8 @@
       const age = feature.properties.age || 0;
       let fillColor;
       if(age > 0.9) fillColor = '#c40000';      // muy antiguo
-      else if(age > 0.6) fillColor = '#ff6600'; // intermedio
-      else fillColor = '#ffcc00';               // reciente
+      else if(age > 0.6) fillColor = '#ff9999'; // intermedio
+      else fillColor = '#fff0f0';               // reciente
       return { color: '#900', weight: 1, fillColor: fillColor, fillOpacity: 0.7 };
     }
   
